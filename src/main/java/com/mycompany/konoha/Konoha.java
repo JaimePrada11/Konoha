@@ -4,6 +4,9 @@
 
 package com.mycompany.konoha;
 
+import com.mycompany.konoha.Modelo.Persistencia.BDConexion;
+import java.sql.Connection;
+
 /**
  *
  * @author camper
@@ -11,6 +14,9 @@ package com.mycompany.konoha;
 public class Konoha {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        
+        Connection con = BDConexion.getConexion();
+        
+        
     }
 }
