@@ -5,46 +5,57 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class CRUD {
 
-    private static Connection con;
-    private static final Logger LOGGER = Logger.getLogger(CRUD.class.getName());
+    public static Connection con; 
+    public static Statement stmt = null;
+    public static ResultSet rs = null; 
 
-    public static void setConnection(Connection connection) throws SQLException {
-        if (connection == null || !connection.isValid(2)) {
-            throw new IllegalArgumentException("La conexión proporcionada es nula o no es válida.");
+    public static Connection setConnection(Connection connection) throws SQLException {
+        if (connection == null) {
+            throw new IllegalArgumentException("The provided connection is null.");
         }
-        con = connection;
+        if (!connection.isValid(2)) {
+            throw new IllegalArgumentException("The provided connection is not valid.");
+        }
+        CRUD.con = connection;
+        return connection;
     }
 
-    public static ResultSet consultaDB(String query, Object... params) {
-        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+    public static Connection getConnection() {
+        return con;
+    }
+
+    private static void closeConnection(Connection con) {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+     public static ResultSet consultaDB(String query, Object... params) {
+
+        try {
+            PreparedStatement pstmt = con.prepareStatement(query);
             for (int i = 0; i < params.length; i++) {
                 pstmt.setObject(i + 1, params[i]);
             }
             return pstmt.executeQuery();
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error en la consulta SELECT", e);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error in SELECT query", e);
             return null;
+
         }
     }
 
     public static boolean insertarDB(String query, Object... params) {
-        return executeUpdate(query, params);
-    }
-
-    public static boolean borrarBD(String query, Object... params) {
-        return executeUpdate(query, params);
-    }
-
-    public static boolean actualizarBD(String query, Object... params) {
-        return executeUpdate(query, params);
-    }
-
-    private static boolean executeUpdate(String query, Object... params) {
         try (PreparedStatement pstmt = con.prepareStatement(query)) {
             for (int i = 0; i < params.length; i++) {
                 pstmt.setObject(i + 1, params[i]);
@@ -52,7 +63,34 @@ public abstract class CRUD {
             pstmt.executeUpdate();
             return true;
         } catch (SQLException ex) {
-            LOGGER.log(Level.SEVERE, "Error en la consulta UPDATE/INSERT/DELETE", ex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error in INSERT query", ex);
+            return false;
+        }
+    }
+
+    public static boolean eliminarDB(String query, Object... params) {
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            for (int i = 0; i < params.length; i++) {
+                pstmt.setObject(i + 1, params[i]);
+            }
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error in DELETE query", ex);
+            return false;
+        }
+
+    }
+
+    public static boolean actualizarDB(String query, Object... params) {
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            for (int i = 0; i < params.length; i++) {
+                pstmt.setObject(i + 1, params[i]);
+            }
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error in UPDATE query", ex);
             return false;
         }
     }
@@ -61,12 +99,12 @@ public abstract class CRUD {
         try {
             if (con != null) {
                 con.setAutoCommit(param);
-                return true;
             } else {
-                throw new SQLException("Conexión no inicializada.");
+                throw new SQLException("Connection not initialized.");
             }
+            return true;
         } catch (SQLException sqlex) {
-            LOGGER.log(Level.SEVERE, "Error configurando autoCommit", sqlex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error setting autoCommit", sqlex);
             return false;
         }
     }
@@ -77,10 +115,10 @@ public abstract class CRUD {
                 con.commit();
                 return true;
             } else {
-                throw new SQLException("Conexión no inicializada.");
+                throw new SQLException("Connection not initialized.");
             }
         } catch (SQLException sqlex) {
-            LOGGER.log(Level.SEVERE, "Error al hacer commit", sqlex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error committing", sqlex);
             return false;
         }
     }
@@ -91,25 +129,34 @@ public abstract class CRUD {
                 con.rollback();
                 return true;
             } else {
-                throw new SQLException("Conexión no inicializada.");
+                throw new SQLException("Connection not initialized.");
             }
         } catch (SQLException sqlex) {
-            LOGGER.log(Level.SEVERE, "Error al hacer rollback", sqlex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error rolling back", sqlex);
             return false;
         }
     }
 
-    public static boolean executeCommit(String statement) {
-        if (setAutoCommitDB(false)) {
-            if (executeUpdate(statement)) {
-                if (commitDB()) {
-                    BDConexion.closeConnection();
-                    return true;
-                }
-            }
-            rollbackDB();
-            BDConexion.closeConnection();
-        }
-        return false;
+    public static void closeConnection() {
+        closeConnection(con);
     }
-}
+    
+    public static boolean executeCommit(String statement) {
+        if (setAutoCommitDB(false)) { 
+            if (eliminarDB(statement) || insertarDB(statement) || actualizarDB(statement)) {
+                commitDB(); 
+                closeConnection();
+                return true;
+            } else {
+                rollbackDB(); 
+                closeConnection();
+                return false;
+            } 
+        } else {
+            closeConnection(); 
+            return false;
+        }
+    }
+
+
+    }

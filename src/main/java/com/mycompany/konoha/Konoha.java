@@ -4,8 +4,11 @@
 
 package com.mycompany.konoha;
 
+import com.mycompany.konoha.Controlador.HabilidadControlador;
+import com.mycompany.konoha.Modelo.Clases.Habilidad;
 import com.mycompany.konoha.Modelo.Persistencia.BDConexion;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  *
@@ -13,10 +16,14 @@ import java.sql.Connection;
  */
 public class Konoha {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         
         Connection con = BDConexion.getConexion();
         
+        System.out.println(HabilidadControlador.obtenerHabilidad(1));
         
+        for (Habilidad value : HabilidadControlador.listarAnimales()) {
+            System.out.println(value);
+        }
     }
 }
