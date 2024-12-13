@@ -15,19 +15,18 @@ public class BDConexion {
     }
 
     public static Connection getConexion() {
-        if (con == null) {
-            try {
-                con = DriverManager.getConnection(url, user, password);
-                if (con != null && con.isValid(2)) {
-                    System.out.println("Conexión exitosa!");
-                } else {
-                    System.out.println("Conexión fallida o no válida.");
-                }
-            } catch (SQLException ex) {
-                System.out.println("Error al establecer la conexión: " + ex.getMessage());
-                ex.printStackTrace();
+
+        try {
+            con = DriverManager.getConnection(url, user, password);
+            if (con != null && con.isValid(2)) {
+            } else {
+                System.out.println("Conexión fallida o no válida.");
             }
+        } catch (SQLException ex) {
+            System.out.println("Error al establecer la conexión: " + ex.getMessage());
+            ex.printStackTrace();
         }
+
         return con;
     }
 

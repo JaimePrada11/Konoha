@@ -142,18 +142,18 @@ public abstract class CRUD {
     }
     
     public static boolean executeCommit(String statement) {
-        if (setAutoCommitDB(false)) { 
+        if (setAutoCommitDB(false)) { // Disable autoCommit
             if (eliminarDB(statement) || insertarDB(statement) || actualizarDB(statement)) {
-                commitDB(); 
+                commitDB(); // Commit if successful
                 closeConnection();
                 return true;
             } else {
-                rollbackDB(); 
+                rollbackDB(); // Rollback if something goes wrong
                 closeConnection();
                 return false;
-            } 
+            } // Rollback in case of exception during transaction
         } else {
-            closeConnection(); 
+            closeConnection(); // Close connection if autoCommit can't be disabled
             return false;
         }
     }

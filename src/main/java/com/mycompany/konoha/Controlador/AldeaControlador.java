@@ -1,44 +1,49 @@
+
 package com.mycompany.konoha.Controlador;
 
+import com.mycompany.konoha.Modelo.Clases.Aldea;
 import com.mycompany.konoha.Modelo.Persistencia.BDConexion;
 import com.mycompany.konoha.Modelo.Persistencia.CRUD;
-import com.mycompany.konoha.Modelo.Clases.Habilidad;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HabilidadControlador {
-
-    public static boolean registarHabilidad(String nombre) throws SQLException {
+/**
+ *
+ * @author camper
+ */
+public class AldeaControlador {
+    
+    public static boolean registarAldea(String nombre) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
 
-        String query = "INSERT INTO Habilidades (Nombre) VALUES (?);";
+        String query = "INSERT INTO Aldeas (Nombre) VALUES (?);";
         return CRUD.insertarDB(query, nombre);
     }
 
-    public static boolean actualizarHabilidad(Integer id, String nombre) throws SQLException {
+    public static boolean actualizarAldea(Integer id, String nombre) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
 
-        String query = "UPDATE Habilidades SET Nombre = '" + nombre + "' WHERE IDHabilidad = ? ;";
+        String query = "UPDATE Aldeas SET Nombre = '" + nombre + "' WHERE IDAldea = ? ;";
         return CRUD.actualizarDB(query, id);
     }
 
-    public static boolean eliminarHabilidad(Integer id) throws SQLException {
+    public static boolean eliminarAldea(Integer id) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
-        String query = "DELETE FROM Habilidades WHERE IDHabilidad= ?;";
+        String query = "DELETE FROM Aldeas WHERE IDAldea= ?;";
         return CRUD.eliminarDB(query, id);
     }
 
-    public static Habilidad obtenerHabilidad(Integer id) throws SQLException {
+    public static Aldea obtenerAldea(Integer id) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
-        String sql = "SELECT * FROM Habilidades WHERE IDHabilidad=" + id + ";";
+        String sql = "SELECT * FROM Aldeas WHERE IDAldea=" + id + ";";
         ResultSet rs = CRUD.consultaDB(sql);
-        Habilidad h1 = new Habilidad();
+        Aldea h1 = new Aldea();
 
         try {
             if (rs.next()) {
-                h1.setIdHabilidad(rs.getInt("IDHabilidad"));
+                h1.setIdAldea(rs.getInt("IDAldea"));
                 h1.setNombre(rs.getString("Nombre"));
 
                 CRUD.closeConnection();
@@ -54,19 +59,19 @@ public class HabilidadControlador {
     }
 
     
-    public static List<Habilidad> listarHabilidades() throws SQLException {
+    public static List<Aldea> listarAldeas() throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
-        List<Habilidad> listaHabilidaes = new ArrayList<>();
+        List<Aldea> listaAldeas = new ArrayList<>();
         try {
-            String sql = "SELECT * from Habilidades";
+            String sql = "SELECT * from Aldeas";
 
             ResultSet rs = CRUD.consultaDB(sql);
 
             while (rs.next()) {
-                Habilidad h1 = new Habilidad();
-                h1.setIdHabilidad(rs.getInt("IDHabilidad"));
+                Aldea h1 = new Aldea();
+                h1.setIdAldea(rs.getInt("IDAldea"));
                 h1.setNombre(rs.getString("Nombre"));
-                listaHabilidaes.add(h1);
+                listaAldeas.add(h1);
             }
 
         } catch (SQLException ex) {
@@ -75,7 +80,6 @@ public class HabilidadControlador {
             CRUD.closeConnection();
         }
 
-        return listaHabilidaes;
+        return listaAldeas;
     }
-
 }

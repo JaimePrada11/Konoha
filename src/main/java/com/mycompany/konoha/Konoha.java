@@ -19,11 +19,6 @@ public class Konoha {
     public static void main(String[] args) throws SQLException {
         
         Connection con = BDConexion.getConexion();
-        
-        System.out.println(HabilidadControlador.obtenerHabilidad(1));
-        
-        for (Habilidad value : HabilidadControlador.listarAnimales()) {
-            System.out.println(value);
-        }
+
     }
 }
