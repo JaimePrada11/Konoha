@@ -6,6 +6,7 @@ public class Rango {
     
     private Integer idRango;
     private String nombre;
+    private String tipo;
 
     public Rango() {
     }
@@ -39,6 +40,16 @@ public class Rango {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    
 
     @Override
     public String toString() {

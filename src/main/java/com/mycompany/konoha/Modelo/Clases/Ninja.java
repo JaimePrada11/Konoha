@@ -33,8 +33,6 @@ public class Ninja {
         this.rango = rango;
     }
 
-    
-
     public String getNombre() {
         return nombre;
     }
@@ -50,9 +48,6 @@ public class Ninja {
     public void setIdIdentificacion(String idIdentificacion) {
         this.idIdentificacion = idIdentificacion;
     }
-
-    
-    
 
     public Integer getIdNinja() {
         return idNinja;
@@ -85,8 +80,8 @@ public class Ninja {
     public void removeHabilidad(Habilidad habilidad) {
         habilidades.remove(habilidad);
     }
-    
-    public List<Habilidad> getHabilidades(){
+
+    public List<Habilidad> getHabilidades() {
         return habilidades;
     }
 
@@ -94,7 +89,5 @@ public class Ninja {
     public String toString() {
         return "Ninja{" + "idNinja=" + idNinja + ", aldea=" + aldea + ", rango=" + rango + ", habilidades=" + habilidades + '}';
     }
-    
-    
 
 }

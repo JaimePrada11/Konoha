@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Mision {
 
     private Integer idMision;
@@ -14,6 +13,7 @@ public class Mision {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private List<Ninja> ninjas;
+    private boolean estado;
 
     public Mision() {
         this.ninjas = new ArrayList<>();
@@ -93,6 +93,14 @@ public class Mision {
         this.fechaFin = fechaFin;
     }
 
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
     public void addNinja(Ninja ninja) {
         ninjas.add(ninja);
     }
@@ -103,6 +111,11 @@ public class Mision {
 
     public List<Ninja> getNinjas() {
         return ninjas;
+    }
+
+    @Override
+    public String toString() {
+        return "Mision{" + "idMision=" + idMision + ", descripcion=" + descripcion + ", rango=" + rango + ", recompensas=" + recompensas + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", ninjas=" + ninjas + ", estado=" + estado + '}';
     }
 
 }
