@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 
 public class BDConexion {
 
-    private static final String url = "jdbc:mysql://localhost:3306/Konoha";
-    private static final String user = "root";
-    private static final String password = "J12345";
+    private static final String URL = "jdbc:mysql://localhost:3306/Konoha";
+    private static final String USER = "root";
+    private static final String PASSWORD = "J12345";
     
     private static Connection con = null;
 
@@ -21,28 +21,37 @@ public class BDConexion {
     }
 
     public static synchronized Connection getConexion() {
+        Connection conexion = null;
         try {
-            if (con == null || con.isClosed() || !con.isValid(2)) {
-                con = DriverManager.getConnection(url, user, password);
-                logger.log(Level.INFO, "Conexión establecida correctamente.");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            conexion = DriverManager.getConnection(URL, USER, PASSWORD);
+            
+            return conexion;
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL JDBC Driver not found: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error trying to connect to database: " + e.getMessage());
+            
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException closeEx) {
+                    System.out.println("Error closing connection: " + closeEx.getMessage());
+                }
             }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Error al establecer la conexión: {0}", ex.getMessage());
-            ex.printStackTrace();
         }
-
-        return con;
+        return null;
     }
 
-    public static void closeConnection() {
+    public static void closeConnection(Connection conexion) {
         try {
-            if (con != null && !con.isClosed()) {
-                con.close();
-                logger.log(Level.INFO, "Conexión cerrada correctamente.");
+            if (conexion != null && !conexion.isClosed()) {
+                conexion.close();
+                System.out.println("Conexión cerrada correctamente.");
             }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Error al cerrar la conexión: {0}", ex.getMessage());
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión: " + e.getMessage());
         }
     }
 }

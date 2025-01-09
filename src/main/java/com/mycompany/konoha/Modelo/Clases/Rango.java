@@ -1,12 +1,16 @@
-
 package com.mycompany.konoha.Modelo.Clases;
 
+import java.io.Serializable;
 
-public class Rango {
-    
+public class Rango implements Serializable{
+
     private Integer idRango;
     private String nombre;
-    private String tipo;
+    private Tipo tipo;
+
+    public enum Tipo {
+        NINJA, MISION
+    }
 
     public Rango() {
     }
@@ -15,14 +19,21 @@ public class Rango {
         this.idRango = idRango;
     }
 
+    public Rango(String nombre, Tipo tipo) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+
+    }
+    
     public Rango(String nombre) {
         this.nombre = nombre;
     }
 
-        
-    public Rango(Integer idRango, String nombre) {
+    public Rango(Integer idRango, String nombre, Tipo tipo) {
         this.idRango = idRango;
         this.nombre = nombre;
+        this.tipo = tipo;
+
     }
 
     public Integer getIdRango() {
@@ -41,20 +52,17 @@ public class Rango {
         this.nombre = nombre;
     }
 
-    public String getTipo() {
+    public Tipo getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
-    
-    
 
     @Override
     public String toString() {
-        return "Rango{" + "idRango=" + idRango + ", nombre=" + nombre + '}';
+        return "Rango{" + "idRango=" + idRango + ", nombre=" + nombre + ", tipo=" + tipo + '}';
     }
-    
-    
+
 }

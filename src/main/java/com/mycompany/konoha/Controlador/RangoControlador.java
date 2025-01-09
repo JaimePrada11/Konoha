@@ -8,41 +8,42 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 
 public class RangoControlador {
     
-        public static boolean registarRango(String nombre) throws SQLException {
+        public static boolean crearRango(String nombre, Rango.Tipo tipo) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
 
-        String query = "INSERT INTO RangosNinjas (Nombre) VALUES (?);";
-        return CRUD.insertarDB(query, nombre);
+        String query = "INSERT INTO Rangos(Nombre, Tipo) VALUES (?,?);";
+        return CRUD.insertarDB(query, nombre, tipo.name());
     }
 
-    public static boolean actualizarRango(Integer id, String nombre) throws SQLException {
+    public static boolean actualizarRango(Integer id, String nombre, Rango.Tipo tipo) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
 
-        String query = "UPDATE Aldeas SET RangosNinjas = '" + nombre + "' WHERE IDRango = ? ;";
-        return CRUD.actualizarDB(query, id);
+        String query = "UPDATE Rangos SET Nombre = ?, Tipo = ? WHERE IDRango = ?;";
+        return CRUD.actualizarDB(query, nombre, tipo.name(), id);
     }
 
     public static boolean eliminarRango(Integer id) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
-        String query = "DELETE FROM RangosNinjas WHERE IDRango= ?;";
-        return CRUD.eliminarDB(query, id);
+        String query = "DELETE FROM Rangos WHERE IDRango = ?;";
+        return CRUD.eliminarDB(query, id); 
     }
 
     public static Rango obtenerRango(Integer id) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
-        String sql = "SELECT * FROM RangosNinjas WHERE IDRangoNinja=" + id + ";";
+        String sql = "SELECT * FROM Rangos WHERE IDRango =" + id + ";";
         ResultSet rs = CRUD.consultaDB(sql);
-        Rango h1 = new Rango();
+        Rango r1 = new Rango();
 
         try {
             if (rs.next()) {
-                h1.setIdRango(rs.getInt("IDRangoNinja"));
-                h1.setNombre(rs.getString("Nombre"));
-
+                r1.setIdRango(rs.getInt("IDRango"));
+                r1.setNombre(rs.getString("Nombre"));
                 CRUD.closeConnection();
             } else {
                 CRUD.closeConnection();
@@ -52,7 +53,7 @@ public class RangoControlador {
             System.out.println(ex.getMessage());
             return null;
         }
-        return h1;
+        return r1;
     }
 
     
@@ -60,15 +61,15 @@ public class RangoControlador {
         CRUD.setConnection(BDConexion.getConexion());
         List<Rango> listaRangos = new ArrayList<>();
         try {
-            String sql = "SELECT * from RangosNinjas";
+            String sql = "SELECT * from Rangos";
 
             ResultSet rs = CRUD.consultaDB(sql);
 
             while (rs.next()) {
-                Rango h1 = new Rango();
-                h1.setIdRango(rs.getInt("IDRangoNinja"));
-                h1.setNombre(rs.getString("Nombre"));
-                listaRangos.add(h1);
+                Rango rango = new Rango();
+                rango.setIdRango(rs.getInt("IDRango"));
+                rango.setNombre(rs.getString("Nombre"));
+                listaRangos.add(rango);
             }
 
         } catch (SQLException ex) {
@@ -77,7 +78,9 @@ public class RangoControlador {
             CRUD.closeConnection();
         }
 
-        return listaRangos;
+        return listaRangos.stream()
+                .filter(r -> r.getNombre() != null && !r.getNombre().isEmpty())
+                .collect(Collectors.toList());
     }
     
 }

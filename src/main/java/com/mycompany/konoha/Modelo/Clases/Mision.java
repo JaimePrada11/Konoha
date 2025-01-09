@@ -1,10 +1,11 @@
 package com.mycompany.konoha.Modelo.Clases;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mision {
+public class Mision implements Serializable{
 
     private Integer idMision;
     private String descripcion;

@@ -1,9 +1,10 @@
 package com.mycompany.konoha.Modelo.Clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ninja {
+public class Ninja implements Serializable{
 
     private Integer idNinja;
     private String nombre;

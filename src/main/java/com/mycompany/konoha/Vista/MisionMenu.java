@@ -1,11 +1,7 @@
 package com.mycompany.konoha.Vista;
 
-import com.mycompany.konoha.Controlador.AldeaControlador;
 import com.mycompany.konoha.Controlador.MisionControlador;
-import com.mycompany.konoha.Controlador.NinjaControlador;
-import static com.mycompany.konoha.Controlador.NinjaControlador.listarNinjas;
 import com.mycompany.konoha.Controlador.RangoControlador;
-import com.mycompany.konoha.Modelo.Clases.Aldea;
 import com.mycompany.konoha.Modelo.Clases.Mision;
 import com.mycompany.konoha.Modelo.Clases.Rango;
 import java.sql.SQLException;
@@ -138,7 +134,7 @@ public class MisionMenu {
                 return;
             }
 
-            boolean result = MisionControlador.eliminarNinja(id);
+            boolean result = MisionControlador.eliminarMision(id);
 
             if (result) {
                 System.out.println("Eliminado.");
@@ -200,7 +196,7 @@ public class MisionMenu {
 
         scanner.nextLine();
         
-        MisionControlador.actualizarNinja(id, descripcion, r, recompensa, fechainicio);
+        MisionControlador.actualizarMision(id, descripcion, r, recompensa, fechainicio, null);
 
 
     }

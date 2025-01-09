@@ -1,4 +1,3 @@
-
 package com.mycompany.konoha.Controlador;
 
 import com.mycompany.konoha.Modelo.Clases.Aldea;
@@ -11,23 +10,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class NinjaControlador {
-    
-    public static boolean registarNinja(String nombre, String idIdentificacion, Aldea aldea, Rango rango) throws SQLException {
+
+    public static boolean registarNinja(String nombre, String Identificacion, Aldea aldea, Rango rango) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
-        
-        String query = "INSERT INTO Ninjas (Nombre, idIdentificacion, IDRangoNinja, IDAldea) VALUES (?, ?, ?, ?);";
-        return CRUD.insertarDB(query, nombre, rango.getIdRango(), aldea.getIdAldea());
+
+        String query = "INSERT INTO Ninjas (Nombre, Identificacion, IDAldea, IDRango) VALUES (?, ?, ?, ?)";
+        return CRUD.insertarDB(query, nombre, Identificacion, rango.getIdRango(), aldea.getIdAldea());
     }
 
     public static boolean actualizarNinja(Integer id, String nombre, String idIdentificacion, Aldea aldea, Rango rango) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
 
-        String query = "UPDATE Ninjas SET Nombre = '"+ nombre + "', idIdentificacion= +'"+ idIdentificacion +"', IDRangoNinja='"
-                + rango.getIdRango() +"',IDAldea='" + aldea.getIdAldea() +"'  WHERE IDNinja = ?;";
-        
-        
+        String query = "UPDATE Ninjas SET Nombre = '" + nombre + "', Identificacion= +'" + idIdentificacion + "', IDRango='"
+                + rango.getIdRango() + "',IDAldea='" + aldea.getIdAldea() + "'  WHERE IDNinja = ?;";
+
         return CRUD.actualizarDB(query, id);
     }
 
@@ -37,7 +34,7 @@ public class NinjaControlador {
         return CRUD.eliminarDB(query, id);
     }
 
-    public static Ninja obtenerHabilidad(Integer id) throws SQLException {
+    public static Ninja obtenerNinja(Integer id) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
         String sql = "SELECT * FROM Ninjas WHERE IDNinja=" + id + ";";
         ResultSet rs = CRUD.consultaDB(sql);
@@ -47,15 +44,14 @@ public class NinjaControlador {
             if (rs.next()) {
                 n1.setIdNinja(rs.getInt("IDNinja"));
                 n1.setNombre(rs.getString("Nombre"));
-                n1.setIdIdentificacion(rs.getString("idIdentificacion"));
-                int rango = rs.getInt("IDRangoNinja");
+                n1.setIdIdentificacion(rs.getString("Identificacion"));
+                int rango = rs.getInt("IDRango");
                 Rango r = RangoControlador.obtenerRango(rango);
                 n1.setRango(r);
-                
+
                 int aldea = rs.getInt("IDAldea");
                 Aldea a = AldeaControlador.obtenerAldea(aldea);
                 n1.setAldea(a);
-                
 
                 CRUD.closeConnection();
             } else {
@@ -69,39 +65,41 @@ public class NinjaControlador {
         return n1;
     }
 
-    
-        public static List<Ninja> listarNinjas() throws SQLException {
+    public static List<Ninja> listarNinjas() throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
         List<Ninja> listaNinjas = new ArrayList<>();
+        ResultSet rs = null;
         try {
             String sql = "SELECT * from Ninjas";
 
-            ResultSet rs = CRUD.consultaDB(sql);
+            rs = CRUD.consultaDB(sql);
 
             while (rs.next()) {
                 Ninja n1 = new Ninja();
                 n1.setIdNinja(rs.getInt("IDNinja"));
                 n1.setNombre(rs.getString("Nombre"));
-                n1.setIdIdentificacion(rs.getString("idIdentificacion"));
-                int rango = rs.getInt("IDRangoNinja");
+                n1.setIdIdentificacion(rs.getString("Identificacion"));
+                int rango = rs.getInt("IDRango");
                 Rango r = RangoControlador.obtenerRango(rango);
                 n1.setRango(r);
-                
+
                 int aldea = rs.getInt("IDAldea");
                 Aldea a = AldeaControlador.obtenerAldea(aldea);
                 n1.setAldea(a);
-                
-                
+
                 listaNinjas.add(n1);
             }
 
         } catch (SQLException ex) {
             System.out.println(ex);
         } finally {
+            if (rs != null) {
+                rs.close();
+            }
             CRUD.closeConnection();
         }
 
         return listaNinjas;
     }
-    
+
 }

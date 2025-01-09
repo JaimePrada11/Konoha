@@ -51,14 +51,14 @@ public class NinjaMenu {
                 case 5 ->
                     addHabilidades();
                 case 0 ->
-                    System.out.println("Exiting the system...");
+                    System.out.println("Adios");
                 default ->
-                    System.out.println("Invalid option. Please try again.");
+                    System.out.println("Opcion invalida.");
             }
         } while (option != 0);
     }
 
-    private static int showAldeas() throws SQLException {
+    private static int mostrarAldeas() throws SQLException {
         Scanner scanner = new Scanner(System.in);
 
         List<Aldea> Aldeas = AldeaControlador.listarAldeas();
@@ -88,13 +88,13 @@ public class NinjaMenu {
         return Aldeas.get(choice - 1).getIdAldea();
     }
     
-    private static int showRangos() throws SQLException {
+    private static int mostrarRangos() throws SQLException {
         Scanner scanner = new Scanner(System.in);
 
         List<Rango> rangos = RangoControlador.listarRangos();
 
-        System.out.println("\n--- Selecciona el rango ---");
-        for (int i = 0; i < rangos.size(); i++) {
+        System.out.println("\n--- Selecciona el rango del ninja ---");
+        for (int i = 0; i < 4; i++) {
             System.out.println((i + 1) + ". " + rangos.get(i).getNombre());
         }
 
@@ -135,14 +135,13 @@ public class NinjaMenu {
         System.out.print("Ingrese el identificador: ");
         String identificador = scanner.nextLine();
         while (identificador.isEmpty()) {
-            System.out.print("Description cannot be empty. Please enter a valid description: ");
+            System.out.print("No puede estar vacio ");
             identificador = scanner.nextLine();
         }
-
        
-        int Aldeas = showAldeas();
+        int Aldeas = mostrarAldeas();
         Aldea s = AldeaControlador.obtenerAldea(Aldeas);
-        int Rango = showRangos();
+        int Rango = mostrarRangos();
         Rango r = RangoControlador.obtenerRango(Rango);
 
         scanner.nextLine();
@@ -160,7 +159,7 @@ public class NinjaMenu {
         Scanner scanner = new Scanner(System.in);
             Integer id = null;
 
-            System.out.print("Enter el id del ninja: ");
+            System.out.print("Ingresa el id del ninja: ");
 
             try {
                 id = scanner.nextInt();
@@ -185,9 +184,9 @@ public class NinjaMenu {
         }
 
        
-        int Aldeas = showAldeas();
+        int Aldeas = mostrarAldeas();
         Aldea s = AldeaControlador.obtenerAldea(Aldeas);
-        int Rango = showRangos();
+        int Rango = mostrarRangos();
         Rango r = RangoControlador.obtenerRango(Rango);
 
         scanner.nextLine();
@@ -203,7 +202,7 @@ public class NinjaMenu {
             Scanner scanner = new Scanner(System.in);
             Integer id = null;
 
-            System.out.print("Enter el id del ninja: ");
+            System.out.print("Ingresa el id del ninja: ");
 
             try {
                 id = scanner.nextInt();

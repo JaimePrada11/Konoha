@@ -1,8 +1,10 @@
 
 package com.mycompany.konoha.Modelo.Clases;
 
+import java.io.Serializable;
 
-public class Aldea {
+
+public class Aldea implements Serializable {
     
     private Integer idAldea;
     private String Nombre;

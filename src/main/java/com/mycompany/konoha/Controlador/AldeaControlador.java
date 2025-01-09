@@ -1,4 +1,3 @@
-
 package com.mycompany.konoha.Controlador;
 
 import com.mycompany.konoha.Modelo.Clases.Aldea;
@@ -6,12 +5,12 @@ import com.mycompany.konoha.Modelo.Persistencia.BDConexion;
 import com.mycompany.konoha.Modelo.Persistencia.CRUD;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class AldeaControlador {
-    
+
     public static boolean registarAldea(String nombre) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
 
@@ -55,7 +54,6 @@ public class AldeaControlador {
         return h1;
     }
 
-    
     public static List<Aldea> listarAldeas() throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
         List<Aldea> listaAldeas = new ArrayList<>();
@@ -77,6 +75,8 @@ public class AldeaControlador {
             CRUD.closeConnection();
         }
 
-        return listaAldeas;
+        return listaAldeas.stream()
+                .sorted(Comparator.comparing(Aldea::getIdAldea)) 
+                .collect(Collectors.toList());
     }
 }

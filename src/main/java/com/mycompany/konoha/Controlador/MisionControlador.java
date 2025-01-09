@@ -5,7 +5,6 @@
 package com.mycompany.konoha.Controlador;
 
 import com.mycompany.konoha.Modelo.Clases.Mision;
-import com.mycompany.konoha.Modelo.Clases.Ninja;
 import com.mycompany.konoha.Modelo.Clases.Rango;
 import com.mycompany.konoha.Modelo.Persistencia.BDConexion;
 import com.mycompany.konoha.Modelo.Persistencia.CRUD;
@@ -28,21 +27,21 @@ public class MisionControlador {
         return CRUD.insertarDB(query, descripcion, rango.getIdRango(), recompensas, fechaInicio);
     }
 
-    public static boolean actualizarNinja(Integer id, String descripcion, Rango rango, String recompensas, LocalDate fechaInicio) throws SQLException {
+    public static boolean actualizarMision(Integer id, String descripcion, Rango rango, String recompensas, LocalDate fechaInicio, LocalDate fechaFin) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
 
         String query = "UPDATE Misiones SET Descripcion = '"+ descripcion + "', IDRangoMision= +'"+ rango.getIdRango() +"', Recompensas='"
-                + recompensas+"',fechaInicio='" +rango.getIdRango() +"'  WHERE IDMision = ?;";
+                + recompensas+"',fechaInicio='" +fechaInicio +"',fechaInicio='" +fechaFin +"'  WHERE IDMision = ?;";
         return CRUD.actualizarDB(query, id);
     }
 
-    public static boolean eliminarNinja(Integer id) throws SQLException {
+    public static boolean eliminarMision(Integer id) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
         String query = "DELETE FROM Misiones WHERE IDMision= ?;";
         return CRUD.eliminarDB(query, id);
     }
 
-    public static Mision obtenerHabilidad(Integer id) throws SQLException {
+    public static Mision obtenerMision(Integer id) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
         String sql = "SELECT * FROM Misiones WHERE IDMision=" + id + ";";
         ResultSet rs = CRUD.consultaDB(sql);
