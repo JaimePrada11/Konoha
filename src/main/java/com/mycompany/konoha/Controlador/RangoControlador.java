@@ -34,13 +34,13 @@ public class RangoControlador {
 
     public static Rango obtenerRango(Integer id) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
-        String sql = "SELECT * FROM RangosNinjas WHERE IDRango=" + id + ";";
+        String sql = "SELECT * FROM RangosNinjas WHERE IDRangoNinja=" + id + ";";
         ResultSet rs = CRUD.consultaDB(sql);
         Rango h1 = new Rango();
 
         try {
             if (rs.next()) {
-                h1.setIdRango(rs.getInt("IDRango"));
+                h1.setIdRango(rs.getInt("IDRangoNinja"));
                 h1.setNombre(rs.getString("Nombre"));
 
                 CRUD.closeConnection();
@@ -66,7 +66,7 @@ public class RangoControlador {
 
             while (rs.next()) {
                 Rango h1 = new Rango();
-                h1.setIdRango(rs.getInt("IDRango"));
+                h1.setIdRango(rs.getInt("IDRangoNinja"));
                 h1.setNombre(rs.getString("Nombre"));
                 listaRangos.add(h1);
             }

@@ -24,14 +24,14 @@ public class MisionControlador {
      public static boolean registarMision(String descripcion, Rango rango, String recompensas, LocalDate fechaInicio) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
         
-        String query = "INSERT INTO Misiones(Descripcion, IDRango, Recompensa,FechaInicio,FechaFin  ) VALUES (?, ?,?,?);";
+        String query = "INSERT INTO Misiones(Descripcion, IDRangoMision, Recompensa,FechaInicio,   ) VALUES (?, ?,?);";
         return CRUD.insertarDB(query, descripcion, rango.getIdRango(), recompensas, fechaInicio);
     }
 
     public static boolean actualizarNinja(Integer id, String descripcion, Rango rango, String recompensas, LocalDate fechaInicio) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
 
-        String query = "UPDATE Misiones SET Descripcion = '"+ descripcion + "', IDRango= +'"+ rango.getIdRango() +"', Recompensas='"
+        String query = "UPDATE Misiones SET Descripcion = '"+ descripcion + "', IDRangoMision= +'"+ rango.getIdRango() +"', Recompensas='"
                 + recompensas+"',fechaInicio='" +rango.getIdRango() +"'  WHERE IDMision = ?;";
         return CRUD.actualizarDB(query, id);
     }
@@ -53,7 +53,7 @@ public class MisionControlador {
                 m1.setIdMision(rs.getInt("IDHabilidad"));
                 m1.setDescripcion(rs.getString("Descripcion"));
                 m1.setRecompensas(rs.getString("Recompensa"));
-                int rango = rs.getInt("IDRango");
+                int rango = rs.getInt("IDRangoMision");
                 Rango r = RangoControlador.obtenerRango(rango);
                 m1.setRango(r);
                 
@@ -83,10 +83,10 @@ public class MisionControlador {
 
             while (rs.next()) {
                 Mision m1 = new Mision();
-                m1.setIdMision(rs.getInt("IDHabilidad"));
+                m1.setIdMision(rs.getInt("IDMision"));
                 m1.setDescripcion(rs.getString("Descripcion"));
                 m1.setRecompensas(rs.getString("Recompensa"));
-                int rango = rs.getInt("IDRango");
+                int rango = rs.getInt("IDRangoMision");
                 Rango r = RangoControlador.obtenerRango(rango);
                 m1.setRango(r);
                 

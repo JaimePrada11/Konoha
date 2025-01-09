@@ -9,10 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author camper
- */
+
 public class AldeaControlador {
     
     public static boolean registarAldea(String nombre) throws SQLException {

@@ -10,12 +10,14 @@ public class Ninja {
     private String idIdentificacion;
     private Aldea aldea;
     private Rango rango;
-    private List<Habilidad> habilidades= new ArrayList<>();
+    private List<Habilidad> habilidades;
 
     public Ninja() {
+        this.habilidades = new ArrayList<>();
     }
 
     public Ninja(Integer idNinja, String nombre, String idIdentificacion, Aldea aldea, Rango rango) {
+        this.habilidades = new ArrayList<>();
         this.idNinja = idNinja;
         this.nombre = nombre;
         this.idIdentificacion = idIdentificacion;
@@ -24,6 +26,7 @@ public class Ninja {
     }
 
     public Ninja(String nombre, String idIdentificacion, Aldea aldea, Rango rango) {
+        this.habilidades = new ArrayList<>();
         this.nombre = nombre;
         this.idIdentificacion = idIdentificacion;
         this.aldea = aldea;

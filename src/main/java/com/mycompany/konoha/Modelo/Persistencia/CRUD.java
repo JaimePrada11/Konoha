@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public abstract class CRUD {
 
     public static Connection con; 
@@ -17,10 +18,10 @@ public abstract class CRUD {
 
     public static Connection setConnection(Connection connection) throws SQLException {
         if (connection == null) {
-            throw new IllegalArgumentException("The provided connection is null.");
+            throw new IllegalArgumentException("La conexión proporcionada es nula.");
         }
         if (!connection.isValid(2)) {
-            throw new IllegalArgumentException("The provided connection is not valid.");
+            throw new IllegalArgumentException("La conexión proporcionada no es válida.");
         }
         CRUD.con = connection;
         return connection;
@@ -33,25 +34,26 @@ public abstract class CRUD {
     private static void closeConnection(Connection con) {
         if (con != null) {
             try {
-                con.close();
+                if (!con.isClosed()) { 
+                    con.close();
+                }
             } catch (SQLException ex) {
-                Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error al cerrar la conexión", ex);
             }
         }
     }
 
-     public static ResultSet consultaDB(String query, Object... params) {
-
+    public static ResultSet consultaDB(String query, Object... params) {
+        PreparedStatement pstmt = null;
         try {
-            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt = con.prepareStatement(query);
             for (int i = 0; i < params.length; i++) {
                 pstmt.setObject(i + 1, params[i]);
             }
             return pstmt.executeQuery();
         } catch (SQLException e) {
-            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error in SELECT query", e);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error en la consulta SELECT: " + query, e);
             return null;
-
         }
     }
 
@@ -63,7 +65,7 @@ public abstract class CRUD {
             pstmt.executeUpdate();
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error in INSERT query", ex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error en la consulta INSERT: " + query, ex);
             return false;
         }
     }
@@ -76,10 +78,9 @@ public abstract class CRUD {
             pstmt.executeUpdate();
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error in DELETE query", ex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error en la consulta DELETE: " + query, ex);
             return false;
         }
-
     }
 
     public static boolean actualizarDB(String query, Object... params) {
@@ -90,7 +91,7 @@ public abstract class CRUD {
             pstmt.executeUpdate();
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error in UPDATE query", ex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error en la consulta UPDATE: " + query, ex);
             return false;
         }
     }
@@ -100,11 +101,11 @@ public abstract class CRUD {
             if (con != null) {
                 con.setAutoCommit(param);
             } else {
-                throw new SQLException("Connection not initialized.");
+                throw new SQLException("La conexión no ha sido inicializada.");
             }
             return true;
         } catch (SQLException sqlex) {
-            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error setting autoCommit", sqlex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error al establecer el modo autoCommit", sqlex);
             return false;
         }
     }
@@ -115,10 +116,10 @@ public abstract class CRUD {
                 con.commit();
                 return true;
             } else {
-                throw new SQLException("Connection not initialized.");
+                throw new SQLException("La conexión no ha sido inicializada.");
             }
         } catch (SQLException sqlex) {
-            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error committing", sqlex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error al hacer commit", sqlex);
             return false;
         }
     }
@@ -129,10 +130,10 @@ public abstract class CRUD {
                 con.rollback();
                 return true;
             } else {
-                throw new SQLException("Connection not initialized.");
+                throw new SQLException("La conexión no ha sido inicializada.");
             }
         } catch (SQLException sqlex) {
-            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error rolling back", sqlex);
+            Logger.getLogger(CRUD.class.getName()).log(Level.SEVERE, "Error al hacer rollback", sqlex);
             return false;
         }
     }
@@ -140,23 +141,4 @@ public abstract class CRUD {
     public static void closeConnection() {
         closeConnection(con);
     }
-    
-    public static boolean executeCommit(String statement) {
-        if (setAutoCommitDB(false)) { // Disable autoCommit
-            if (eliminarDB(statement) || insertarDB(statement) || actualizarDB(statement)) {
-                commitDB(); // Commit if successful
-                closeConnection();
-                return true;
-            } else {
-                rollbackDB(); // Rollback if something goes wrong
-                closeConnection();
-                return false;
-            } // Rollback in case of exception during transaction
-        } else {
-            closeConnection(); // Close connection if autoCommit can't be disabled
-            return false;
-        }
-    }
-
-
-    }
+}

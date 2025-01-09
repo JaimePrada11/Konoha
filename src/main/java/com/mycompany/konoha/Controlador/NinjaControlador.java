@@ -17,14 +17,14 @@ public class NinjaControlador {
     public static boolean registarNinja(String nombre, String idIdentificacion, Aldea aldea, Rango rango) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
         
-        String query = "INSERT INTO Ninjas (Nombre, idIdentificacion, IDRango, IDAldea) VALUES (?, ?, ?, ?);";
+        String query = "INSERT INTO Ninjas (Nombre, idIdentificacion, IDRangoNinja, IDAldea) VALUES (?, ?, ?, ?);";
         return CRUD.insertarDB(query, nombre, rango.getIdRango(), aldea.getIdAldea());
     }
 
     public static boolean actualizarNinja(Integer id, String nombre, String idIdentificacion, Aldea aldea, Rango rango) throws SQLException {
         CRUD.setConnection(BDConexion.getConexion());
 
-        String query = "UPDATE Ninjas SET Nombre = '"+ nombre + "', idIdentificacion= +'"+ idIdentificacion +"', IDRango='"
+        String query = "UPDATE Ninjas SET Nombre = '"+ nombre + "', idIdentificacion= +'"+ idIdentificacion +"', IDRangoNinja='"
                 + rango.getIdRango() +"',IDAldea='" + aldea.getIdAldea() +"'  WHERE IDNinja = ?;";
         
         
@@ -45,10 +45,10 @@ public class NinjaControlador {
 
         try {
             if (rs.next()) {
-                n1.setIdNinja(rs.getInt("IDHabilidad"));
+                n1.setIdNinja(rs.getInt("IDNinja"));
                 n1.setNombre(rs.getString("Nombre"));
                 n1.setIdIdentificacion(rs.getString("idIdentificacion"));
-                int rango = rs.getInt("IDRango");
+                int rango = rs.getInt("IDRangoNinja");
                 Rango r = RangoControlador.obtenerRango(rango);
                 n1.setRango(r);
                 
@@ -80,10 +80,10 @@ public class NinjaControlador {
 
             while (rs.next()) {
                 Ninja n1 = new Ninja();
-                n1.setIdNinja(rs.getInt("IDHabilidad"));
+                n1.setIdNinja(rs.getInt("IDNinja"));
                 n1.setNombre(rs.getString("Nombre"));
                 n1.setIdIdentificacion(rs.getString("idIdentificacion"));
-                int rango = rs.getInt("IDRango");
+                int rango = rs.getInt("IDRangoNinja");
                 Rango r = RangoControlador.obtenerRango(rango);
                 n1.setRango(r);
                 

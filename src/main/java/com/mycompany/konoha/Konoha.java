@@ -7,6 +7,8 @@ package com.mycompany.konoha;
 import com.mycompany.konoha.Controlador.HabilidadControlador;
 import com.mycompany.konoha.Modelo.Clases.Habilidad;
 import com.mycompany.konoha.Modelo.Persistencia.BDConexion;
+import com.mycompany.konoha.Vista.MisionMenu;
+import com.mycompany.konoha.Vista.NinjaMenu;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -19,6 +21,9 @@ public class Konoha {
     public static void main(String[] args) throws SQLException {
         
         Connection con = BDConexion.getConexion();
+        
+        //NinjaMenu.showMenu();
+        MisionMenu.showMenu();
 
     }
 }

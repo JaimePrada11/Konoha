@@ -1,28 +1,25 @@
-
 package com.mycompany.konoha.Modelo.Clases;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author camper
- */
+
 public class Mision {
+
     private Integer idMision;
     private String descripcion;
     private Rango rango;
     private String recompensas;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private List<Ninja> ninjas = new ArrayList<>();
+    private List<Ninja> ninjas;
 
     public Mision() {
+        this.ninjas = new ArrayList<>();
+
     }
 
-    
-    
     public Mision(Integer idMision, String descripcion, Rango rango, String recompensas, LocalDate fechaInicio, LocalDate fechaFin) {
         this.idMision = idMision;
         this.descripcion = descripcion;
@@ -30,6 +27,7 @@ public class Mision {
         this.recompensas = recompensas;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.ninjas = new ArrayList<>();
     }
 
     public Mision(String descripcion, Rango rango, String recompensas, LocalDate fechaInicio) {
@@ -37,6 +35,8 @@ public class Mision {
         this.rango = rango;
         this.recompensas = recompensas;
         this.fechaInicio = fechaInicio;
+        this.ninjas = new ArrayList<>();
+
     }
 
     public Integer getIdMision() {
@@ -76,6 +76,9 @@ public class Mision {
     }
 
     public void setFechaInicio(LocalDate fechaInicio) {
+        if (this.fechaFin != null && fechaInicio != null && fechaInicio.isAfter(fechaFin)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin.");
+        }
         this.fechaInicio = fechaInicio;
     }
 
@@ -84,9 +87,12 @@ public class Mision {
     }
 
     public void setFechaFin(LocalDate fechaFin) {
+        if (this.fechaInicio != null && fechaFin != null && fechaFin.isBefore(fechaInicio)) {
+            throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio.");
+        }
         this.fechaFin = fechaFin;
     }
-    
+
     public void addNinja(Ninja ninja) {
         ninjas.add(ninja);
     }
@@ -94,10 +100,9 @@ public class Mision {
     public void removeNinja(Ninja ninja) {
         ninjas.remove(ninja);
     }
-    
-    public List<Ninja> getNinjas(){
+
+    public List<Ninja> getNinjas() {
         return ninjas;
     }
-    
-    
+
 }
